@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-var gateway = `ws://192.168.1.100/ws`;
+var gateway = `ws://192.168.1.103/ws`;
 var ws: any;
 
 function getReadings(){
@@ -45,6 +45,7 @@ function onMessage(event: any) {
 html, body, head {
   margin: 0;
   height: 100%;
+  background-color: #222;
 }
 
 #__nuxt {

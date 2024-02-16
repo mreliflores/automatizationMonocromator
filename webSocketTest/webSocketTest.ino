@@ -95,9 +95,9 @@ void loop() {
   if(pass) {
     for(int i=0; i<10; i++) {
       digitalWrite(4, HIGH);
-      delay(500);
+      delay(100);
       digitalWrite(4, LOW);
-      delay(500);
+      delay(100);
     }
     pass = false;
   }
