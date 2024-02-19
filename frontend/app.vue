@@ -1,16 +1,49 @@
 <template>
-  <div class="placeButton">
-    <button 
-    class="buttonStart"
-    @click="handleValidateButtonClick"
+  <header>
+    Header
+  </header>
+
+  <div class="all">
+    <div
+    class="parameters"
     >
-      Get Data
-    </button>
+      Parameters
+      <div>
+        Comunication
+        <input v-model="ip" type="text">
+      </div>
+      <form action="">
+        <label for="time_constant">
+          Time constant
+          <input
+          v-model="tau"
+          type="number"
+          id="time_constant"
+          name="time_constant"
+          >
+        </label>
+      </form>
+      <button 
+      class="buttonStart"
+      @click="handleValidateButtonClick"
+      >
+        Send command
+      </button>
+    </div>
+
+    <chart />
   </div>
+
+  <footer>
+    Footer
+  </footer>
 </template>
 
 <script lang="ts" setup>
-var gateway = `ws://192.168.1.103/ws`;
+import chart from './components/chart.vue';
+
+const ip = ref("");
+const tau = ref("");
 var ws: any;
 
 function getReadings(){
@@ -23,6 +56,7 @@ function onOpen(event: any) {
 }
 
 function handleValidateButtonClick() {
+  let gateway = `ws://${ip.value}/ws`;
   ws = new WebSocket(gateway);
   ws.onopen = onOpen;
   ws.onmessage = onMessage;
@@ -49,17 +83,34 @@ html, body, head {
 }
 
 #__nuxt {
-  height: 100%;
+  height: 95%;
 }
 
-.placeButton {
+header {
+  height: 50px;
+}
+
+footer {
+  height: 150px;
+}
+
+.all {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   height: 100%;
+  background-color: #1155cc;
 }
 
-button, input[type="submit"], input[type="reset"] {
+.parameters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ccc;
+  width: 40%;
+}
+
+button, input[type="submit"], input[type="reset"], input[type="text"], input[type="number"] {
 	background: none;
 	color: inherit;
 	border: none;
@@ -73,8 +124,14 @@ button, input[type="submit"], input[type="reset"] {
   border-radius: 5px;
   border: 1px solid #ccc;
   height: 35px;
-  width: 90px;
+  width: 150px;
   background-color: #1155cc;
   color: white;
+}
+
+@media (max-width: 800px) {
+  .all {
+    flex-direction: column;
+  }
 }
 </style>
