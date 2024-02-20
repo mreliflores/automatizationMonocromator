@@ -10,7 +10,7 @@
 import Chart from 'chart.js/auto';
 
 export default {
-  name: 'chart',
+  name: 'Chart',
   data () {
     return {
       p: [
@@ -58,7 +58,7 @@ export default {
   display: flex;
   justify-content:center;
   align-items:center;
-  height: 100%;
+  margin: 60px 0;
   width: 100%;
 }
 

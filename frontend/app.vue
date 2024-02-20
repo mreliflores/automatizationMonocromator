@@ -1,28 +1,34 @@
 <template>
-  <header>
+  <header
+  :style="backgroundColorSwitch"
+  >
     Header
+    <AtomToggleBox 
+      height="25px"
+      width="40px"
+    />
   </header>
 
-  <div class="all">
+  <div 
+  :style="backgroundColorSwitch"
+  class="all">
     <div
     class="parameters"
     >
-      Parameters
       <div>
-        Comunication
-        <input v-model="ip" type="text">
+        Parameters
       </div>
-      <form action="">
-        <label for="time_constant">
-          Time constant
-          <input
-          v-model="tau"
-          type="number"
-          id="time_constant"
-          name="time_constant"
-          >
-        </label>
-      </form>
+
+      <div
+      class="entries">
+        <div>
+          Communication
+        </div>
+        <InputParam
+        :state="ip"
+        type_="text" placeholder_="Hola"/>
+      </div>
+
       <button 
       class="buttonStart"
       @click="handleValidateButtonClick"
@@ -31,7 +37,7 @@
       </button>
     </div>
 
-    <chart />
+    <Chart />
   </div>
 
   <footer>
@@ -40,11 +46,27 @@
 </template>
 
 <script lang="ts" setup>
-import chart from './components/chart.vue';
+
+
+const isDark = useIsDark().isDark
+const appConfig = useAppConfig().theme
 
 const ip = ref("");
 const tau = ref("");
 var ws: any;
+
+const backgroundColorSwitch = computed(() => {
+  const style: any = {}
+  if (isDark.value) {
+    style['background-color'] = appConfig.colorsDark.backgroundColor_
+    style['color'] = appConfig.colorsDark.textPrimaryColor
+  } else {
+    style['background-color'] = appConfig.colorsLight.backgroundColor_
+    style['color'] = appConfig.colorsLight.textPrimaryColor
+  }
+
+  return style 
+})
 
 function getReadings(){
     ws.send("getReadings");
@@ -57,6 +79,7 @@ function onOpen(event: any) {
 
 function handleValidateButtonClick() {
   let gateway = `ws://${ip.value}/ws`;
+  console.log(gateway)
   ws = new WebSocket(gateway);
   ws.onopen = onOpen;
   ws.onmessage = onMessage;
@@ -73,6 +96,18 @@ function onMessage(event: any) {
     //}
 }
 
+/*
+button, input[type="submit"], input[type="reset"], input[type="text"], input[type="number"] {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+*/
+
 </script>
 
 <style>
@@ -88,18 +123,19 @@ html, body, head {
 
 header {
   height: 50px;
+  background-color: #fff;
 }
 
 footer {
   height: 150px;
+  background-color: aquamarine;
 }
 
 .all {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
   align-items: center;
-  height: 100%;
-  background-color: #1155cc;
+  background-color: #222;
 }
 
 .parameters {
@@ -107,17 +143,13 @@ footer {
   flex-direction: column;
   align-items: center;
   background-color: #ccc;
-  width: 40%;
+  width: 80%;
+  padding: 60px 15px;
+  margin: 30px 15px;
 }
 
-button, input[type="submit"], input[type="reset"], input[type="text"], input[type="number"] {
-	background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+.entries {
+  margin: 10px 0;
 }
 
 .buttonStart {
