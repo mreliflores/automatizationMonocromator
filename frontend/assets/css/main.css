@@ -1,0 +1,18 @@
+button {
+	background: none;
+	color: inherit;
+  border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+input[type="submit"], input[type="reset"], input[type="text"], input[type="number"] {
+	background: none;
+	color: inherit;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}

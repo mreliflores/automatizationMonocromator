@@ -2,12 +2,11 @@
 #include <WiFi.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-#include "SPIFFS.h"
 #include <Arduino_JSON.h>
 
 // Replace with your network credentials
-const char* ssid = "lab laser 2";
-const char* password = "160,Lab.Laser!";
+const char* ssid = "TP-LINK_D12FE3";
+const char* password = "31133289";
 
 bool pass = false;
 
@@ -24,6 +23,12 @@ JSONVar readings;
 String getSensorReadings(int count){
   readings["magneti field"] = String(hallRead());
   readings["count"] = String(count);
+  String jsonString = JSON.stringify(readings);
+  return jsonString;
+}
+
+String getIP(){
+  readings["ip"] = String(WiFi.localIP());
   String jsonString = JSON.stringify(readings);
   return jsonString;
 }
@@ -55,6 +60,9 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
       String sensorReadings = getSensorReadings(0);
       notifyClients(sensorReadings);
       pass = true;
+    } else if (strcmp((char*)data, "getIP")==0) {
+      String ip = getIP();
+      notifyClients(ip);
     }
   }
 }

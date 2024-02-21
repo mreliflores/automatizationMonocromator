@@ -14,27 +14,57 @@
   class="all">
     <div
     class="parameters"
+    :style="backgroundColorSwitch"
     >
       <div>
         Parameters
       </div>
 
+      
       <div
-      class="entries">
+      class="entries"
+      v-for="entry in entries"
+      >
+
         <div>
-          Communication
+          {{ entry.title }}
         </div>
-        <InputParam
-        :state="ip"
-        type_="text" placeholder_="Hola"/>
+        <div>
+          
+          <InputParam
+          :style="entry.button ? {'width': '240px'}:{}"
+          v-model="entry.value_"
+          type_="text" :placeholder_="entry.placeholder"
+          @change="(e:any) => {
+            const input_ = e.target.value
+            entry.value_ = input_
+            console.log('o')
+          }"
+          />
+          <AtomButton
+          :style="{'margin-left': '10px'}"
+          height="35px"
+          width="70px"
+          v-if="entry.button"
+          >
+            Get IP
+          </AtomButton>
+        </div>
       </div>
 
-      <button 
-      class="buttonStart"
+      <AtomButton
       @click="handleValidateButtonClick"
+      height="35px"
+      width="150px"
+      :style="{'margin-top':'50px'}"
       >
-        Send command
-      </button>
+        Send Command
+      </AtomButton>
+      
+      This is a preview of the changes in the form
+      <pre>{{ JSON.stringify(entries, null, 2) }}
+      </pre>
+      
     </div>
 
     <Chart />
@@ -46,13 +76,37 @@
 </template>
 
 <script lang="ts" setup>
-
+import '~/assets/css/main.css'
 
 const isDark = useIsDark().isDark
 const appConfig = useAppConfig().theme
 
-const ip = ref("");
-const tau = ref("");
+const entries = ref([
+  {
+    title: "Commmunication",
+    value_: "",
+    placeholder: 'Write the IP of the ESP32',
+    button: false
+  },
+  {
+    title: "Time constant (ms)",
+    value_: '',
+    placeholder: 'Introduce the time constant',
+    button: false
+  },
+  {
+    title: "Minimum Wavelenght (nm)",
+    value_: '',
+    placeholder: 'Introduce the minimum wavelenght',
+    button: false
+  },
+  {
+    title: "Maximum Wavelenght (nm)",
+    value_: '',
+    placeholder: 'Introduce the minimum wavelenght',
+    button: false
+  },
+])
 var ws: any;
 
 const backgroundColorSwitch = computed(() => {
@@ -72,14 +126,17 @@ function getReadings(){
     ws.send("getReadings");
 }
 
+function getIP(){
+    ws.send("getIP");
+}
+
 function onOpen(event: any) {
     console.log('Connection opened');
     getReadings();
 }
 
 function handleValidateButtonClick() {
-  let gateway = `ws://${ip.value}/ws`;
-  console.log(gateway)
+  let gateway = `ws://${entries.value[0].value_}/ws`;
   ws = new WebSocket(gateway);
   ws.onopen = onOpen;
   ws.onmessage = onMessage;
@@ -143,22 +200,17 @@ footer {
   flex-direction: column;
   align-items: center;
   background-color: #ccc;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 10px;
   width: 80%;
   padding: 60px 15px;
   margin: 30px 15px;
 }
 
 .entries {
-  margin: 10px 0;
-}
-
-.buttonStart {
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  height: 35px;
-  width: 150px;
-  background-color: #1155cc;
-  color: white;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 800px) {

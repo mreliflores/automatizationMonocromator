@@ -7,15 +7,12 @@ export default defineNuxtConfig({
     { path: '~/components/atoms',
       pathPrefix: false
     },
-    { path: '~/components/molecules',
-      pathPrefix: false
-    },
-    { path: '~/components/organism',
-      pathPrefix: false
-    },
+    //{ path: '~/components/molecules',
+      //pathPrefix: false
+    //},
+    //{ path: '~/components/organism',
+      //pathPrefix: false
+    //},
     '~/components',
   ],
-  modules: [
-    'nuxt-icon'
-  ]
 })

@@ -1,81 +1,83 @@
 <template>
   <input
   :type="type_"
-  :value="state"
-  @input="$emit('update:modelValue', $event.target.value)"
   :placeholder="placeholder_"
   class="inputGeneral"
-  :style="switchDM">
+  :style="switchDM"
+  @blur="focused"
+  @focus="unfocused"
+  >
 </template>
     
 <script>
-  export default {
-    name: 'InputParam',
-    data () {
-      return {
-        dati: ""
-      }
+export default {
+  name: 'InputParam',
+  props: {
+    type_: {
+      type: String
     },
-    props: {
-      type_: {
-        type: String
-      },
-      placeholder_: {
-        type: String
-      },
-      state: {
-        type: String
-      }
+    placeholder_: {
+      type: String
     },
-    setup() {
-      const isDark = useIsDark().isDark
-      const appConfig = useAppConfig().theme
-      return {
-          isDark,
-          appConfig
-      }
+    state: {
+      type: String
+    }
+  },
+  setup() {
+    const isDark = useIsDark().isDark
+    const appConfig = useAppConfig().theme
+    return {
+        isDark,
+        appConfig,
+    }
+  },
+  computed: {
+    switchDM() {
+      const darkOrLight = this.isDark
+      ? this.appConfig.colorsDark.backgroundColor_
+      : this.appConfig.colorsLight.backgroundColor_
+
+      const borderColor = this.appConfig.colorsLight.borderBoxColor
+
+      const textColor = this.isDark
+      ? this.appConfig.colorsDark.textPrimaryColor
+      : this.appConfig.colorsLight.textPrimaryColor
+
+      const style = {}
+
+      style['background-color'] = darkOrLight
+
+      style['color'] = textColor
+
+      style['border-color'] = borderColor
+
+      return style
     },
-    computed: {
-      switchDM() {
-        const darkOrLight = this.isDark
-        ? this.appConfig.colorsDark.backgroundColor_
-        : this.appConfig.colorsLight.backgroundColor_
+  },
+  methods: {
+    focused(e) {
+      e.target.style.borderColor = "";
+      e.target.style.boxShadow = "";
+    },
+    unfocused(e) {
+      const coloroxShadowFocused = this.isDark ? this.appConfig.colorsDark.primaryColor_: this.appConfig.colorsLight.primaryColor_
 
-        const borderColor = this.isDark
-        ? this.appConfig.colorsDark.primaryColor_
-        : this.appConfig.colorsLight.primaryColor_
-
-        const textColor = this.isDark
-        ? this.appConfig.colorsDark.textPrimaryColor
-        : this.appConfig.colorsLight.textPrimaryColor
-
-        const style = {}
-
-        style['background-color'] = darkOrLight
-
-        style['color'] = textColor
-
-        style['border-color'] = borderColor
-
-        return style
-      }
+      e.target.style.borderColor = this.isDark ? this.appConfig.colorsDark.primaryColor_: this.appConfig.colorsLight.primaryColor_
+      e.target.style.boxShadow = "inset 0 0 5px 1px "+coloroxShadowFocused
     }
   }
+}
 </script>
 
 <style>
 input.inputGeneral {
   border-style: solid;
-  height: 30px;
-  width: 280px;
-  box-shadow: inset 0 0 5px 1px black;
+  border-width: 2px;
+  height: 35px;
+  width: 320px;
+  box-shadow: inset 0 0 5px 0 #AAA;
   border-radius: 5px;
-  border-width: 1px;
   text-align: center;
-  margin: 3px 0;
-}
-
-input.inputGeneral:focus {
-  box-shadow: inset 1px 1px 10px 1px #199930;
+  margin: 8px 0;
 }
 </style>

@@ -3,7 +3,7 @@ export default defineAppConfig({
     theme: {
       dark: true,
       colorsLight: {
-        primaryColor_: '#19CC30',
+        primaryColor_: '#19AA30',
         primaryAccentColor_: '#10DD60',
         secondaryColor_: '#1299FF',
         backgroundColor_: '#EEE',
