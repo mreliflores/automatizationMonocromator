@@ -8,7 +8,12 @@
 const char* ssid = "TP-LINK_D12FE3";
 const char* password = "31133289";
 
+int tau;
+int lambda1;
+int lambda2;
+
 bool pass = false;
+bool test = false;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -60,9 +65,20 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
       String sensorReadings = getSensorReadings(0);
       notifyClients(sensorReadings);
       pass = true;
-    } else if (strcmp((char*)data, "getIP")==0) {
-      String ip = getIP();
-      notifyClients(ip);
+    } else {
+      JSONVar obj = JSON.parse(message);
+      String tauString = JSON.stringify(obj["tau"]);
+      String lambda1String = JSON.stringify(obj["lambda1"]);
+      String lambda2String = JSON.stringify(obj["lambda2"]);
+
+      tauString.replace("\"", "");
+      lambda1String.replace("\"", "");
+      lambda2String.replace("\"", "");
+      
+      tau = tauString.toInt();
+      lambda1 = lambda1String.toInt();
+      lambda2 = lambda2String.toInt();
+      test = true;
     }
   }
 }
@@ -108,6 +124,12 @@ void loop() {
       delay(100);
     }
     pass = false;
+  } else if(test) {
+    for(int i=lambda1; i<lambda2; i++) {
+      Serial.println(i);
+      delay(100);
+  }
+    test = false;
   }
   //for(int i=0; i<1000; i++){
   //  String sensorReadings = getSensorReadings(i);

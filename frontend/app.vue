@@ -12,10 +12,7 @@
   <div 
   :style="backgroundColorSwitch"
   class="all">
-    <div
-    class="parameters"
-    :style="backgroundColorSwitch"
-    >
+    <AtomBox>
       <div>
         Parameters
       </div>
@@ -60,12 +57,7 @@
       >
         Send Command
       </AtomButton>
-      
-      This is a preview of the changes in the form
-      <pre>{{ JSON.stringify(entries, null, 2) }}
-      </pre>
-      
-    </div>
+    </AtomBox>
 
     <Chart />
   </div>
@@ -127,12 +119,16 @@ function getReadings(){
 }
 
 function getIP(){
-    ws.send("getIP");
+    ws.send(JSON.stringify({
+      'tau': entries.value[1].value_,
+      'lambda1': entries.value[2].value_,
+      'lambda2': entries.value[3].value_,
+    }));
 }
 
 function onOpen(event: any) {
     console.log('Connection opened');
-    getReadings();
+    getIP();
 }
 
 function handleValidateButtonClick() {
@@ -152,19 +148,6 @@ function onMessage(event: any) {
     //    document.getElementById(key).//innerHTML = myObj[key];
     //}
 }
-
-/*
-button, input[type="submit"], input[type="reset"], input[type="text"], input[type="number"] {
-	background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
-}
-*/
-
 </script>
 
 <style>

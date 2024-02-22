@@ -1,3 +1,7 @@
+:root {
+  --placeholder-color: none;
+}
+
 button {
 	background: none;
 	color: inherit;

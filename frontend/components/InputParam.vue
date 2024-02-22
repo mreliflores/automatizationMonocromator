@@ -3,7 +3,6 @@
   :type="type_"
   :placeholder="placeholder_"
   class="inputGeneral"
-  :style="switchDM"
   @blur="focused"
   @focus="unfocused"
   >
@@ -46,9 +45,7 @@ export default {
       const style = {}
 
       style['background-color'] = darkOrLight
-
       style['color'] = textColor
-
       style['border-color'] = borderColor
 
       return style
@@ -58,18 +55,23 @@ export default {
     focused(e) {
       e.target.style.borderColor = "";
       e.target.style.boxShadow = "";
+      e.target.style.color = "";
+      e.target.style.setProperty('--placeholder-color', '')
+
     },
     unfocused(e) {
       const coloroxShadowFocused = this.isDark ? this.appConfig.colorsDark.primaryColor_: this.appConfig.colorsLight.primaryColor_
 
       e.target.style.borderColor = this.isDark ? this.appConfig.colorsDark.primaryColor_: this.appConfig.colorsLight.primaryColor_
-      e.target.style.boxShadow = "inset 0 0 5px 1px "+coloroxShadowFocused
+      e.target.style.boxShadow = "inset 0 0 5px 1px " + coloroxShadowFocused
+
+      e.target.style.setProperty('--placeholder-color', coloroxShadowFocused)
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 input.inputGeneral {
   border-style: solid;
   border-width: 2px;
@@ -79,5 +81,8 @@ input.inputGeneral {
   border-radius: 5px;
   text-align: center;
   margin: 8px 0;
+}
+input.inputGeneral::placeholder {
+  color: var(--placeholder-color);
 }
 </style>
