@@ -64,7 +64,7 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
       // if it is, send current sensor readings
       String sensorReadings = getSensorReadings(0);
       notifyClients(sensorReadings);
-      pass = true;
+      test = false;
     } else {
       JSONVar obj = JSON.parse(message);
       String tauString = JSON.stringify(obj["tau"]);
@@ -125,11 +125,11 @@ void loop() {
     }
     pass = false;
   } else if(test) {
-    for(int i=lambda1; i<lambda2; i++) {
+    for(int i=lambda1; i<lambda2 & test; i++) {
       Serial.println(i);
-      delay(100);
+      delay(1000);
   }
-    test = false;
+    //test = false;
   }
   //for(int i=0; i<1000; i++){
   //  String sensorReadings = getSensorReadings(i);

@@ -128,7 +128,7 @@ function getIP(){
 
 function onOpen(event: any) {
     console.log('Connection opened');
-    getIP();
+    getReadings();
 }
 
 function handleValidateButtonClick() {

@@ -62,7 +62,8 @@ export default {
     unfocused(e) {
       const coloroxShadowFocused = this.isDark ? this.appConfig.colorsDark.primaryColor_: this.appConfig.colorsLight.primaryColor_
 
-      e.target.style.borderColor = this.isDark ? this.appConfig.colorsDark.primaryColor_: this.appConfig.colorsLight.primaryColor_
+      e.target.style.borderColor = coloroxShadowFocused
+      e.target.style.color = coloroxShadowFocused
       e.target.style.boxShadow = "inset 0 0 5px 1px " + coloroxShadowFocused
 
       e.target.style.setProperty('--placeholder-color', coloroxShadowFocused)
