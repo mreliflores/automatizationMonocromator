@@ -31,7 +31,7 @@
           <InputParam
           :style="entry.button ? {'width': '240px'}:{}"
           v-model="entry.value_"
-          type_="text" :placeholder_="entry.placeholder"
+          :type_="entry.type_" :placeholder_="entry.placeholder"
           @change="(e:any) => {
             const input_ = e.target.value
             entry.value_ = input_
@@ -49,14 +49,30 @@
         </div>
       </div>
 
-      <AtomButton
-      @click="handleValidateButtonClick"
-      height="35px"
-      width="150px"
-      :style="{'margin-top':'50px'}"
+      <div
+      :style="{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-evenly' 
+      }"
       >
-        Send Command
-      </AtomButton>
+        <AtomButton
+        @click="handleButtonStartProcess"
+        height="35px"
+        width="150px"
+        :style="{'margin-top':'50px'}"
+        >
+          Start process
+        </AtomButton>
+        <AtomButton
+        @click="handleButtonStopProcess"
+        height="35px"
+        width="150px"
+        :style="{'margin-top':'50px', backgroundColor: 'red'}"
+        >
+          Stop process
+        </AtomButton>
+      </div>
     </AtomBox>
 
     <Chart />
@@ -78,25 +94,29 @@ const entries = ref([
     title: "Commmunication",
     value_: "",
     placeholder: 'Write the IP of the ESP32',
-    button: false
+    button: false,
+    type_: 'text'
   },
   {
     title: "Time constant (ms)",
     value_: '',
     placeholder: 'Introduce the time constant',
-    button: false
+    button: false,
+    type_: 'number'
   },
   {
     title: "Minimum Wavelenght (nm)",
     value_: '',
     placeholder: 'Introduce the minimum wavelenght',
-    button: false
+    button: false,
+    type_: 'number'
   },
   {
     title: "Maximum Wavelenght (nm)",
     value_: '',
     placeholder: 'Introduce the minimum wavelenght',
-    button: false
+    button: false,
+    type_: 'number'
   },
 ])
 var ws: any;
@@ -128,13 +148,25 @@ function getIP(){
 
 function onOpen(event: any) {
     console.log('Connection opened');
+    getIP();
+}
+
+function onOpenStop(event: any) {
+    console.log('Connection opened');
     getReadings();
 }
 
-function handleValidateButtonClick() {
+function handleButtonStartProcess() {
   let gateway = `ws://${entries.value[0].value_}/ws`;
   ws = new WebSocket(gateway);
   ws.onopen = onOpen;
+  ws.onmessage = onMessage;
+}
+
+function handleButtonStopProcess() {
+  let gateway = `ws://${entries.value[0].value_}/ws`;
+  ws = new WebSocket(gateway);
+  ws.onopen = onOpenStop;
   ws.onmessage = onMessage;
 }
 

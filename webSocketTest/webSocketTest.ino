@@ -125,11 +125,14 @@ void loop() {
     }
     pass = false;
   } else if(test) {
+    delay(500);
     for(int i=lambda1; i<lambda2 & test; i++) {
-      Serial.println(i);
-      delay(1000);
+      digitalWrite(4, HIGH);
+      delay(tau);
+      digitalWrite(4, LOW);
+      delay(tau);
   }
-    //test = false;
+    test = false;
   }
   //for(int i=0; i<1000; i++){
   //  String sensorReadings = getSensorReadings(i);
