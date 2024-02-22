@@ -1,14 +1,23 @@
 <template>
   <nav
   :style="{
+    ...backgroundSecondaryColorSwitch,
     ...backgroundColorSwitch
   }"
   >
     Header
-    <AtomToggleBox 
-      height="25px"
-      width="40px"
-    />
+    <div
+    :style="{
+      display: 'flex'
+    }"
+    >
+      Otras
+      Opciones
+      <AtomToggleBox 
+        height="25px"
+        width="40px"
+      />
+    </div>
 </nav>
 
   <div 
@@ -140,13 +149,9 @@ const backgroundColorSwitch = computed(() => {
 
 const backgroundSecondaryColorSwitch = computed(() => {
   const style: any = {}
-  if (isDark.value) {
-    style['background-color'] = appConfig.colorsDark.backgroundColor_
-    style['color'] = appConfig.colorsDark.textPrimaryColor
-  } else {
-    style['background-color'] = appConfig.colorsLight.backgroundColor_
-    style['color'] = appConfig.colorsLight.textPrimaryColor
-  }
+  const color = isDark ? appConfig.colorsDark.backgroundSecondaryColor_:appConfig.colorsLight.backgroundSecondaryColor_
+
+  style['box-shadow'] = "0 0 10px 0 " + color
 
   return style 
 })

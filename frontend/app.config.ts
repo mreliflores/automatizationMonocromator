@@ -18,7 +18,7 @@ export default defineAppConfig({
         primaryAccentColor_: '#00D4A2',
         secondaryColor_: '#C23373',
         backgroundColor_: '#222',
-        backgroundSecondaryColor_: '#333',
+        backgroundSecondaryColor_: 'black',
         borderBoxColor: '#666',
         textPrimaryColor: '#ddd',
         textSecondaryColor: '#aaa',
