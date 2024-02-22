@@ -3,10 +3,10 @@
   class="atomBox"
   :style="isDark ? {
     borderColor: appConfig.colorsDark.primaryColor_,
-    boxShadow: '0 0 30px 0 ' + appConfig.colorsDark.primaryColor_
+    boxShadow: '0 0 20px 0 ' + appConfig.colorsDark.primaryColor_
   }:{
     borderColor: appConfig.colorsLight.primaryColor_,
-    boxShadow: '0 0 30px 0 ' + appConfig.colorsLight.primaryColor_
+    boxShadow: '0 0 20px 0 ' + appConfig.colorsLight.primaryColor_
   }"
   >
    <slot /> 

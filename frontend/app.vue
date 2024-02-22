@@ -1,13 +1,15 @@
 <template>
-  <header
-  :style="backgroundColorSwitch"
+  <nav
+  :style="{
+    ...backgroundColorSwitch
+  }"
   >
     Header
     <AtomToggleBox 
       height="25px"
       width="40px"
     />
-  </header>
+</nav>
 
   <div 
   :style="backgroundColorSwitch"
@@ -78,7 +80,9 @@
     <Chart />
   </div>
 
-  <footer>
+  <footer
+  :style="backgroundColorSwitch"
+  >
     Footer
   </footer>
 </template>
@@ -122,6 +126,19 @@ const entries = ref([
 var ws: any;
 
 const backgroundColorSwitch = computed(() => {
+  const style: any = {}
+  if (isDark.value) {
+    style['background-color'] = appConfig.colorsDark.backgroundColor_
+    style['color'] = appConfig.colorsDark.textPrimaryColor
+  } else {
+    style['background-color'] = appConfig.colorsLight.backgroundColor_
+    style['color'] = appConfig.colorsLight.textPrimaryColor
+  }
+
+  return style 
+})
+
+const backgroundSecondaryColorSwitch = computed(() => {
   const style: any = {}
   if (isDark.value) {
     style['background-color'] = appConfig.colorsDark.backgroundColor_
@@ -186,16 +203,21 @@ function onMessage(event: any) {
 html, body, head {
   margin: 0;
   height: 100%;
-  background-color: #222;
 }
 
 #__nuxt {
   height: 95%;
 }
 
-header {
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  right: 0;
+  left: 0;
+  padding: 0 15px;
+  position: fixed;
   height: 50px;
-  background-color: #fff;
 }
 
 footer {
@@ -208,19 +230,7 @@ footer {
   flex-direction: column;
   align-items: center;
   background-color: #222;
-}
-
-.parameters {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #ccc;
-  border-width: 3px;
-  border-style: solid;
-  border-radius: 10px;
-  width: 80%;
-  padding: 60px 15px;
-  margin: 30px 15px;
+  padding: 60px 0;
 }
 
 .entries {
