@@ -5,12 +5,15 @@
 #include <Arduino_JSON.h>
 
 // Replace with your network credentials
-const char* ssid = "TP-LINK_D12FE3";
-const char* password = "31133289";
+const char* ssid = "lab laser 2";
+const char* password = "160,Lab.Laser!";
 
 int tau;
 int lambda1;
 int lambda2;
+int DIR = 15;
+int STEP = 4;
+int reset = 16;
 
 bool pass = false;
 bool test = false;
@@ -20,6 +23,15 @@ AsyncWebServer server(80);
 
 // Create a WebSocket object
 AsyncWebSocket ws("/ws");
+
+// Set your Static IP address
+IPAddress local_IP(192, 168, 1, 184);
+// Set your Gateway IP address
+IPAddress gateway(192, 168, 1, 1);
+
+IPAddress subnet(255, 255, 0, 0);
+IPAddress primaryDNS(8, 8, 8, 8);   //optional
+IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 // Json Variable to Hold Sensor Readings
 JSONVar readings;
@@ -47,6 +59,10 @@ void initWiFi() {
     Serial.print('.');
     delay(1000);
   }
+  digitalWrite(2, HIGH);
+  delay(500);
+  digitalWrite(2, LOW);
+  delay(500);
   Serial.println(WiFi.localIP());
 }
 
@@ -87,6 +103,7 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
   switch (type) {
     case WS_EVT_CONNECT:
       Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+      
       break;
     case WS_EVT_DISCONNECT:
       Serial.printf("WebSocket client #%u disconnected\n", client->id());
@@ -107,9 +124,17 @@ void initWebSocket() {
 
 void setup() {
   Serial.begin(115200);
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+    Serial.println("STA Failed to configure");
+  }
+  pinMode(2, OUTPUT);
+  pinMode(15, OUTPUT);
   pinMode(4, OUTPUT);
+  pinMode(16, OUTPUT);
+  digitalWrite(16, HIGH);
   initWiFi();
   initWebSocket();
+
 
   // Start server
   server.begin();
@@ -118,20 +143,35 @@ void setup() {
 void loop() {
   if(pass) {
     for(int i=0; i<10; i++) {
-      digitalWrite(4, HIGH);
+      digitalWrite(2, HIGH);
       delay(100);
-      digitalWrite(4, LOW);
+      digitalWrite(2, LOW);
       delay(100);
     }
     pass = false;
   } else if(test) {
+    digitalWrite(15, HIGH);
     delay(500);
     for(int i=lambda1; i<lambda2 & test; i++) {
+      digitalWrite(2, HIGH);
       digitalWrite(4, HIGH);
       delay(tau);
+      digitalWrite(2, LOW);
       digitalWrite(4, LOW);
       delay(tau);
-  }
+    }
+    
+    digitalWrite(15, LOW);
+    delay(500);
+
+    for(int i=lambda1; i<lambda2 & test; i++) {
+      digitalWrite(2, HIGH);
+      digitalWrite(4, HIGH);
+      delay(tau);
+      digitalWrite(2, LOW);
+      digitalWrite(4, LOW);
+      delay(tau);
+    }
     test = false;
   }
   //for(int i=0; i<1000; i++){
