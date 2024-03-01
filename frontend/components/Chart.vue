@@ -6,48 +6,53 @@
 </template>
 
 
-<script>
+<script >
 import Chart from 'chart.js/auto';
+
 
 export default {
   name: 'Chart',
-  data () {
-    return {
-      p: [
-        { year: 2010, count: 10 },
-        { year: 2011, count: 20 },
-        { year: 2012, count: 15 },
-        { year: 2013, count: 25 },
-        { year: 2014, count: 22 },
-        { year: 2015, count: 30 },
-        { year: 2016, count: 28 },
-      ]
+  props: {
+    intensity: {
+      type: Array,
+      default: []
+    },
+    nanometers: {
+      type: Array,
+      default: []
     }
   },
   mounted () {
     const ctx = document.getElementById('ploti');
-    new Chart(
+    const realTimeChart = new Chart(
       ctx,
       {
-        type: 'bar',
+        type: 'line',
         data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: this.nanometers,//getDataNanometers,
           datasets: [
             {
               label: "Caracas",
-              data: [12, 19, 3, 5, 2, 3]
+              data: this.intensity,//getDataIntensity  
             },
-            {
-              label: "Caracas",
-              data: [1, 15, 12, 7, 4, 9]
-            }
           ]
         },
         options: {
-          responsive: true
+          responsive: true,
+          layout: {
+            padding: 20
+          }
         }
       }
     );
+  },
+  computed: {
+    getDataX() {
+      return this.nanometers
+    },
+    getDataY() {
+      return this.intensity
+    },
   }
 };
 

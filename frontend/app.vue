@@ -86,7 +86,10 @@
       </div>
     </AtomBox>
 
-    <Chart />
+    <Chart
+    :intensity="intensity"
+    :nanometers="nanometers"
+    />
   </div>
 
   <footer
@@ -101,6 +104,9 @@ import '~/assets/css/main.css'
 
 const isDark = useIsDark().isDark
 const appConfig = useAppConfig().theme
+
+const intensity = ref<Array<Number>>([])
+const nanometers = ref<Array<Number>>([])
 
 const entries = ref([
   {
@@ -193,7 +199,17 @@ function handleButtonStopProcess() {
 }
 
 function onMessage(event: any) {
-    console.log(event.data);
+    const obj = JSON.parse(event.data)
+    const voltage = parseFloat(obj.voltaje)
+    const count = parseFloat(obj.count)
+    intensity.value = [...intensity.value, voltage]
+    nanometers.value = [...nanometers.value, count]
+    console.log(intensity.value)
+    console.log(nanometers.value)
+    //realTimeChart.data.datasets.forEach((dataset: any) => {
+        //dataset.data.push(obj.voltaje);
+    //});
+    //realTimeChart.update()
     //var myObj = JSON.parse(event.data);
     //var keys = Object.keys(myObj);
 
