@@ -29,18 +29,18 @@ export default {
       {
         type: 'line',
         data: {
-          labels: this.nanometers,//getDataNanometers,
+          labels: this.getDataX,//getDataNanometers,
           datasets: [
             {
-              label: "Caracas",
-              data: this.intensity,//getDataIntensity  
+              label: "Caraca",
+              data: this.getDataY,//getDataIntensity  
             },
           ]
         },
         options: {
           responsive: true,
           layout: {
-            padding: 20
+            padding: 240
           }
         }
       }

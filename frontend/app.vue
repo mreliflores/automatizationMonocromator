@@ -46,7 +46,6 @@
           @change="(e:any) => {
             const input_ = e.target.value
             entry.value_ = input_
-            console.log('o')
           }"
           />
           <AtomButton
@@ -105,8 +104,8 @@ import '~/assets/css/main.css'
 const isDark = useIsDark().isDark
 const appConfig = useAppConfig().theme
 
-const intensity = ref<Array<Number>>([])
-const nanometers = ref<Array<Number>>([])
+const intensity: any = []
+const nanometers: any = []
 
 const entries = ref([
   {
@@ -202,10 +201,10 @@ function onMessage(event: any) {
     const obj = JSON.parse(event.data)
     const voltage = parseFloat(obj.voltaje)
     const count = parseFloat(obj.count)
-    intensity.value = [...intensity.value, voltage]
-    nanometers.value = [...nanometers.value, count]
-    console.log(intensity.value)
-    console.log(nanometers.value)
+    intensity.push(voltage)
+    nanometers.push(count)
+    console.log(intensity)
+    console.log(nanometers)
     //realTimeChart.data.datasets.forEach((dataset: any) => {
         //dataset.data.push(obj.voltaje);
     //});
