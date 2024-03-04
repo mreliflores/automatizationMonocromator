@@ -29,7 +29,7 @@ div.atomBox {
   border-style: solid;
   border-radius: 10px;
   width: 80%;
-  padding: 60px 15px;
+  padding: 30px 15px;
   margin: 30px 15px;
 }
 </style>

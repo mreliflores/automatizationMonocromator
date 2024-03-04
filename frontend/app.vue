@@ -8,11 +8,12 @@
     Header
     <div
     :style="{
-      display: 'flex'
+      display: 'flex',
+      alignItems: 'center'
     }"
     >
-      Otras
-      Opciones
+      <div>Otras</div>
+      <div>Opciones</div>
       <AtomToggleBox 
         height="25px"
         width="40px"
@@ -24,7 +25,11 @@
   :style="backgroundColorSwitch"
   class="all">
     <AtomBox>
-      <div>
+      <div
+      :style="{
+        marginBottom: '25px'
+      }"
+      >
         Parameters
       </div>
 
@@ -82,6 +87,14 @@
         >
           Stop process
         </AtomButton>
+        <AtomButton
+        @click="testing"
+        height="35px"
+        width="150px"
+        :style="{'margin-top':'50px', backgroundColor: 'red'}"
+        >
+          Test
+        </AtomButton>
       </div>
     </AtomBox>
 
@@ -92,7 +105,10 @@
   </div>
 
   <footer
-  :style="backgroundColorSwitch"
+  :style="{
+  ...backgroundColorSwitch,
+  ...backgroundSecondaryColorSwitch
+  }"
   >
     Footer
   </footer>
@@ -104,8 +120,8 @@ import '~/assets/css/main.css'
 const isDark = useIsDark().isDark
 const appConfig = useAppConfig().theme
 
-const intensity: any = []
-const nanometers: any = []
+const intensity: any = ref([])
+const nanometers: any = ref([])
 
 const entries = ref([
   {
@@ -160,6 +176,17 @@ const backgroundSecondaryColorSwitch = computed(() => {
 
   return style 
 })
+
+function testing() {
+  let i = 0
+  setInterval(() => {
+    if(i<100) {
+      intensity.value = [...intensity.value, i]
+      nanometers.value = [...nanometers.value, i]
+      i++
+    }
+  },100)
+}
 
 function getReadings(){
     ws.send("getReadings");
