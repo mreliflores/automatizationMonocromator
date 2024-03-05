@@ -12,7 +12,7 @@ npm install nuxt
 
 npm install --save-dev nuxt-icon
 
-npm install chart.js
+npm i vue-chartjs chart.js
 ```
 
 Then run
