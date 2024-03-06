@@ -62,26 +62,28 @@ export default {
     switchDarkMode() {
       if(this.isDark) {
         const x = {
-          'transform': 'translateX(65%)',
+          'transform': 'translateX(68%)',
           'background-color': this.appConfig.colorsDark.backgroundColor_,
-          'border': '1px solid ' + this.appConfig.colorsDark.borderBoxColor
+          'border': '1px solid ' + this.appConfig.colorsDark.primaryColor_
         }
         return x
       } else {
         const x = {
           'transform': 'translateX(0%)',
           'background-color': this.appConfig.colorsLight.backgroundColor_,
-          'border': '1px solid ' + this.appConfig.colorsLight.borderBoxColor
+          'border': '1px solid ' + this.appConfig.colorsLight.primaryColor_
         }
         return x
       }
     },
     styli() {
       if(this.isDark) {
-        this.style['box-shadow'] = "inset 0 0 5px 1px " + this.appConfig.colorsDark.primaryColor_
+        this.style['box-shadow'] = "inset 0 0 20px 0 " + this.appConfig.colorsDark.primaryColor_
+        this.style['border'] = '1px solid ' + this.appConfig.colorsDark.primaryColor_
         return this.style
       } else {
-        this.style['box-shadow'] = "inset 0 0 5px 1px " + this.appConfig.colorsLight.primaryColor_
+        this.style['box-shadow'] = "inset 0 0 20px 0 " + this.appConfig.colorsLight.primaryColor_
+        this.style['border'] = '1px solid ' + this.appConfig.colorsLight.primaryColor_
         return this.style
       }
     }

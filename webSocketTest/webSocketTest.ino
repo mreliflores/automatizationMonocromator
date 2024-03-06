@@ -41,6 +41,8 @@ IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 // Json Variable to Hold Sensor Readings
 JSONVar readings;
+int client_;
+
 
 // Get Sensor Readings and return JSON object
 String getSensorReadings(int count){
@@ -109,7 +111,7 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
   switch (type) {
     case WS_EVT_CONNECT:
       Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
-      
+      client_  = client->id();
       break;
     case WS_EVT_DISCONNECT:
       Serial.printf("WebSocket client #%u disconnected\n", client->id());
@@ -148,7 +150,7 @@ void setup() {
   digitalWrite(M0, HIGH);
   digitalWrite(M1, LOW);
   digitalWrite(M2, LOW);
-  digitalWrite(RESET, HIGH);
+  digitalWrite(RESET, LOW);
   digitalWrite(STEP, LOW);
   digitalWrite(DIR, LOW);
   digitalWrite(ENABLE, HIGH);
@@ -171,14 +173,13 @@ void loop() {
     }
     pass = false;
   } else if(test) {
-    digitalWrite(DIR, HIGH);
+    digitalWrite(DIR, LOW);
     delay(2000);
     for(int i=lambda1; i<lambda2 & test; i++) {
       digitalWrite(2, HIGH);
       digitalWrite(ENABLE, LOW);
       digitalWrite(STEP, HIGH);
       delay(tau);
-      //notifyClients(getSensorReadings(i));
       notifyClients(getSensorReadings(i));
       digitalWrite(2, LOW);
       digitalWrite(ENABLE, HIGH);
@@ -186,7 +187,7 @@ void loop() {
       delay(tau);
     }
     
-    digitalWrite(DIR, LOW);
+    digitalWrite(DIR, HIGH);
     delay(2000);
 
     for(int i=lambda1; i<lambda2 & test; i++) {
@@ -201,12 +202,11 @@ void loop() {
     }
     digitalWrite(ENABLE, HIGH);
     test = false;
+    ws.close(client_);
   }
   //for(int i=0; i<1000; i++){
   //  String sensorReadings = getSensorReadings(i);
   //  notifyClients(sensorReadings);
   //  delay(100);
   //}
-
-  ws.cleanupClients();
 }

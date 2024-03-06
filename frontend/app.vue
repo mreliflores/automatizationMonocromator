@@ -68,7 +68,8 @@
       :style="{
         width: '100%',
         display: 'flex',
-        justifyContent: 'space-evenly' 
+        justifyContent: 'space-evenly',
+        flexWrap: 'wrap'
       }"
       >
         <AtomButton
@@ -80,6 +81,14 @@
           Start process
         </AtomButton>
         <AtomButton
+        @click="cleanGraph"
+        height="35px"
+        width="150px"
+        :style="{'margin-top':'50px'}"
+        >
+          Clean Graph
+        </AtomButton>
+        <AtomButton
         @click="handleButtonStopProcess"
         height="35px"
         width="150px"
@@ -87,6 +96,8 @@
         >
           Stop process
         </AtomButton>
+        <!--Solo para pruebas removible-->
+        <!--
         <AtomButton
         @click="testing"
         height="35px"
@@ -95,6 +106,8 @@
         >
           Test
         </AtomButton>
+        -->
+        <!--Solo para pruebas (removible)-->
       </div>
     </AtomBox>
 
@@ -153,7 +166,7 @@ const entries = ref([
     type_: 'number'
   },
 ])
-var ws: any;
+var ws: any = null;
 
 const backgroundColorSwitch = computed(() => {
   const style: any = {}
@@ -177,6 +190,7 @@ const backgroundSecondaryColorSwitch = computed(() => {
   return style 
 })
 
+//Removible
 function testing() {
   let i = 0
   setInterval(() => {
@@ -186,6 +200,12 @@ function testing() {
       i++
     }
   },100)
+}
+//Removible
+
+function cleanGraph() {
+  intensity.value = []
+  nanometers.value = []
 }
 
 function getReadings(){
@@ -210,11 +230,21 @@ function onOpenStop(event: any) {
     getReadings();
 }
 
-function handleButtonStartProcess() {
+function onClose(event: any) {
+    console.log('Connection disconnected');
+    ws.close();
+}
+
+function handleButtonStartProcess(){
   let gateway = `ws://${entries.value[0].value_}/ws`;
   ws = new WebSocket(gateway);
+  if (intensity.value.length > 0 && nanometers.value.length > 0) {
+    intensity.value = []
+    nanometers.value = []
+  }
   ws.onopen = onOpen;
   ws.onmessage = onMessage;
+  ws.onclose = onClose;
 }
 
 function handleButtonStopProcess() {
@@ -222,16 +252,17 @@ function handleButtonStopProcess() {
   ws = new WebSocket(gateway);
   ws.onopen = onOpenStop;
   ws.onmessage = onMessage;
+  ws.onclose = onClose;
 }
 
 function onMessage(event: any) {
     const obj = JSON.parse(event.data)
     const voltage = parseFloat(obj.voltaje)
     const count = parseFloat(obj.count)
-    intensity.push(voltage)
-    nanometers.push(count)
-    console.log(intensity)
-    console.log(nanometers)
+    intensity.value = [...intensity.value, voltage]
+    nanometers.value = [...nanometers.value, count]
+    console.log(intensity.value)
+    console.log(nanometers.value)
     //realTimeChart.data.datasets.forEach((dataset: any) => {
         //dataset.data.push(obj.voltaje);
     //});

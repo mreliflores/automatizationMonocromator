@@ -7,7 +7,8 @@
   >
     <Line 
     :data="chartData" :options="chartOptions"
-    updateMode="none">
+    updateMode="none"
+    >
     </Line>
     <AtomButton
     height="35px"
@@ -76,6 +77,36 @@ export default {
             top: 20
           }
         },
+        scales: {
+          x: {
+            min: -10,
+            max: 50,
+            title: {
+              display: true,
+              text: 'Nanometers (nm)'
+            },
+            border: {
+              display: true
+            },
+            grid: {
+              display: false
+            },
+          },
+          y: {
+            min: -10,
+            max: 50,
+            title: {
+              display: true,
+              text: 'Intensity'
+            },
+            border: {
+              display: true
+            },
+            grid: {
+              display: false
+            }
+          },
+        }
       }
     }
   },
@@ -103,6 +134,7 @@ export default {
       const color = this.isDark ? this.appConfig.colorsDark.textSecondaryColor:this.appConfig.colorsLight.textSecondaryColor
 
       const options = {
+        maintainAspectRatio:false,
         animations: false,
         responsive: true,
         layout: {
@@ -118,7 +150,6 @@ export default {
         },
         scales: {
           x: {
-            beginAtZero: true,
             title: {
               display: true,
               text: 'Nanometers (nm)',
@@ -134,6 +165,8 @@ export default {
             }
           },
           y: {
+            min: -0.1,
+            max: 3.3,
             title: {
               display: true,
               text: 'Intensity',
@@ -162,8 +195,8 @@ export default {
   display: flex;
   justify-content:center;
   align-items:center;
-  margin: 60px 0;
-  width: 80%;
+  margin: 0 0 60px 0;
+  width: 90%;
+  height: 400px;
 }
-
 </style>
