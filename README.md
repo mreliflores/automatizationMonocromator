@@ -13,6 +13,8 @@ npm install nuxt
 npm install --save-dev nuxt-icon
 
 npm i vue-chartjs chart.js
+
+npm install -D @nuxtjs/google-f
 ```
 
 Then run
