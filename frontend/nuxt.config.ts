@@ -15,4 +15,11 @@ export default defineNuxtConfig({
     //},
     '~/components',
   ],
+  modules: ['@nuxtjs/google-fonts'],
+  googleFonts: {
+    families: {
+      Lato: [700],
+
+    }
+  }
 })

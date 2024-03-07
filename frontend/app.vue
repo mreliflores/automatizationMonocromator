@@ -281,6 +281,7 @@ function onMessage(event: any) {
 html, body, head {
   margin: 0;
   height: 100%;
+  font-family: 'Nunito', sans-serif;
 }
 
 #__nuxt {
