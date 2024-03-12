@@ -131,6 +131,7 @@
     </AtomButton>
   </div>
 
+
   <footer
   :style="{
   ...backgroundColorSwitch,
@@ -143,6 +144,7 @@
 
 <script lang="ts" setup>
 import '~/assets/css/main.css'
+import '@material/web/radio/radio.js';
 
 const isDark = useIsDark().isDark
 const appConfig = useAppConfig().theme
