@@ -5,7 +5,13 @@
     ...backgroundColorSwitch
   }"
   >
-    Header
+    <div
+    :style="{
+      fontFamily: 'Caveat'
+    }"
+    >
+      LabLaserUCV
+    </div>
     <div
     :style="{
       display: 'flex',
@@ -97,7 +103,7 @@
           Stop process
         </AtomButton>
         <!--Solo para pruebas removible-->
-        <!--
+        
         <AtomButton
         @click="testing"
         height="35px"
@@ -106,7 +112,7 @@
         >
           Test
         </AtomButton>
-        -->
+        
         <!--Solo para pruebas (removible)-->
       </div>
     </AtomBox>
@@ -115,6 +121,14 @@
     :intensity="intensity"
     :nanometers="nanometers"
     />
+    <AtomButton
+    @click="csvDownloader"
+    height="35px"
+    width="150px"
+    :style="{'margin-top':'50px', backgroundColor: 'red'}"
+    >
+      Test_
+    </AtomButton>
   </div>
 
   <footer
@@ -133,8 +147,8 @@ import '~/assets/css/main.css'
 const isDark = useIsDark().isDark
 const appConfig = useAppConfig().theme
 
-const intensity: any = ref([])
-const nanometers: any = ref([])
+const intensity: any = ref<Array<number>>([])
+const nanometers: any = ref<Array<number>>([])
 
 const entries = ref([
   {
@@ -161,12 +175,34 @@ const entries = ref([
   {
     title: "Maximum Wavelenght (nm)",
     value_: '',
-    placeholder: 'Introduce the minimum wavelenght',
+    placeholder: 'Introduce the maximum wavelenght',
     button: false,
     type_: 'number'
   },
 ])
 var ws: any = null;
+
+function csvDownloader() {
+  const csv = generateCsvContent();
+  createCsvDownloadLink(csv);
+}
+
+function generateCsvContent() {
+  let csv = 'Nanometers (nm), Intensity (a.u)\n';
+  nanometers.value.map((e: any, i: any) => {
+    csv += `${e},${intensity.value[i]}`;
+    csv += '\n';
+  })
+  return csv;
+}
+
+function createCsvDownloadLink(csv: string) {
+  const anchor = document.createElement('a');
+  anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  anchor.target = '_blank';
+  anchor.download = 'nameYourFileHere.csv';
+  anchor.click();
+}
 
 const backgroundColorSwitch = computed(() => {
   const style: any = {}
@@ -193,13 +229,23 @@ const backgroundSecondaryColorSwitch = computed(() => {
 //Removible
 function testing() {
   let i = 0
+  let x: Array<number> = []
+  let y: Array<number> = []
   setInterval(() => {
-    if(i<100) {
-      intensity.value = [...intensity.value, i]
-      nanometers.value = [...nanometers.value, i]
+    if(i<5) {
+      for(let j=i*50; j<(i+1)*50; j++) {
+        
+        x.push(j)
+        y.push(2)
+      }
+      intensity.value = [...intensity.value, ...y]
+      nanometers.value = [...nanometers.value, ...x]
+      console.log(nanometers.value)
+      x = []
+      y= []
       i++
     }
-  },100)
+  },1000)
 }
 //Removible
 
@@ -281,7 +327,7 @@ function onMessage(event: any) {
 html, body, head {
   margin: 0;
   height: 100%;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Exo', 'Nunito', sans-serif;
 }
 
 #__nuxt {

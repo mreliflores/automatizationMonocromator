@@ -14,7 +14,7 @@ npm install --save-dev nuxt-icon
 
 npm i vue-chartjs chart.js
 
-npm install -D @nuxtjs/google-f
+npm install -D @nuxtjs/google-fonts
 ```
 
 Then run

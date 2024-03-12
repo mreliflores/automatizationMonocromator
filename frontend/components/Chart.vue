@@ -10,13 +10,6 @@
     updateMode="none"
     >
     </Line>
-    <AtomButton
-    height="35px"
-    width="150px"
-    :style="{'margin-top':'50px', backgroundColor: 'red'}"
-    >
-      Test_
-    </AtomButton>
     <div>{{ intensity[intensity.length-1] }}</div>
   </div>
 </template>
@@ -26,7 +19,7 @@
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement, Colors } from 'chart.js'
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement, Colors)
-
+ChartJS.defaults.font.family = "Exo";
 
 export default {
   name: 'Chart',
@@ -106,7 +99,7 @@ export default {
               display: false
             }
           },
-        }
+        },
       }
     }
   },
@@ -145,7 +138,7 @@ export default {
         plugins: {
           title: {
             display: true,
-            text: "Raman's Spectrum"
+            text: "Raman's Spectrum",
           }
         },
         scales: {
