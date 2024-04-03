@@ -144,7 +144,7 @@
 
 <script lang="ts" setup>
 import '~/assets/css/main.css'
-import '@material/web/radio/radio.js';
+//import '@material/web/radio/radio.js';
 
 const isDark = useIsDark().isDark
 const appConfig = useAppConfig().theme
@@ -263,8 +263,8 @@ function getReadings(){
 function getIP(){
     ws.send(JSON.stringify({
       'tau': entries.value[1].value_,
-      'lambda1': entries.value[2].value_,
-      'lambda2': entries.value[3].value_,
+      'lambda1': 4*entries.value[2].value_,
+      'lambda2': 4*entries.value[3].value_,
     }));
 }
 
@@ -306,9 +306,9 @@ function handleButtonStopProcess() {
 function onMessage(event: any) {
     const obj = JSON.parse(event.data)
     const voltage = parseFloat(obj.voltaje)
-    const count = parseFloat(obj.count)
+    const nanometer = parseFloat(obj.nanometer)
     intensity.value = [...intensity.value, voltage]
-    nanometers.value = [...nanometers.value, count]
+    nanometers.value = [...nanometers.value, nanometer]
     console.log(intensity.value)
     console.log(nanometers.value)
     //realTimeChart.data.datasets.forEach((dataset: any) => {

@@ -17,8 +17,8 @@ int lambda2;
 int M0 = 12;
 int M1 = 14;
 int M2 = 27;
-int DIR = 32;
-int STEP = 33;
+int DIR = 23;
+int STEP = 25;
 int RESET = 26;
 int ENABLE = 13;
 int FOTOMULTIPLICADOR = 34;
@@ -45,9 +45,9 @@ IPAddress secondaryDNS(8, 8, 4, 4); //optional
 JSONVar readings;
 
 // Get Sensor Readings and return JSON object
-String getSensorReadings(int count){
+String getSensorReadings(float nanometer){
   readings["voltaje"] = String(3.3*analogRead(FOTOMULTIPLICADOR)/4096);
-  readings["count"] = String(count);
+  readings["nanometer"] = String(nanometer);
   String jsonString = JSON.stringify(readings);
   return jsonString;
 }
@@ -171,33 +171,43 @@ void loop() {
     delay(3);
     digitalWrite(RESET, HIGH);
     delay(2000);
+
+    for(int i=0; i<(lambda1+3) & test; i++) {
+      digitalWrite(2, HIGH);
+      digitalWrite(STEP, HIGH);
+      digitalWrite(ENABLE, LOW);
+      delay(10);
+      digitalWrite(2, LOW);
+      digitalWrite(ENABLE, HIGH);
+      digitalWrite(STEP, LOW);
+      delay(10);
+    }
+
+    delay(1000);
     
-    for(int i=lambda1; i<lambda2 & test; i++) {
+    for(int i=0; i<(lambda2-lambda1) & test; i++) {
       digitalWrite(2, HIGH);
       digitalWrite(STEP, HIGH);
       digitalWrite(ENABLE, LOW);
       delay(tau);
-      notifyClients(getSensorReadings(i));
+      notifyClients(getSensorReadings(lambda1/4 + i*0.25));
       digitalWrite(2, LOW);
       digitalWrite(ENABLE, HIGH);
       digitalWrite(STEP, LOW);
       delay(tau);
     }
 
-    digitalWrite(RESET, LOW);
     digitalWrite(DIR, HIGH);
-    delay(3);
-    digitalWrite(RESET, HIGH);
     delay(2000);
     digitalWrite(ENABLE, LOW);
     
-    for(int i=lambda1; i<lambda2 & test; i++) {
+    for(int i=0; i<lambda2 & test; i++) {
       digitalWrite(2, HIGH);
       digitalWrite(STEP, HIGH);
-      delay(tau);
+      delay(10);
       digitalWrite(2, LOW);
       digitalWrite(STEP, LOW);
-      delay(tau);
+      delay(10);
     }
     
     digitalWrite(ENABLE, HIGH);

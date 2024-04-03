@@ -72,8 +72,8 @@ export default {
         },
         scales: {
           x: {
-            min: -10,
-            max: 50,
+            suggestedMin: 10,
+            suggestedMax: 100,
             title: {
               display: true,
               text: 'Nanometers (nm)'
