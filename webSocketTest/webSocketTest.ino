@@ -33,13 +33,13 @@ AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
 
 // Set your Static IP address
-IPAddress local_IP(192, 168, 1, 185);
+//IPAddress local_IP(192, 168, 1, 190);
 // Set your Gateway IP address
-IPAddress gateway(192, 168, 1, 1);
+//IPAddress gateway(192, 168, 1, 1);
 
-IPAddress subnet(255, 255, 0, 0);
-IPAddress primaryDNS(8, 8, 8, 8);   //optional
-IPAddress secondaryDNS(8, 8, 4, 4); //optional
+//IPAddress subnet(255, 255, 0, 0);
+//IPAddress primaryDNS(8, 8, 8, 8);   //optional
+//IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 // Json Variable to Hold Sensor Readings
 JSONVar readings;
@@ -61,12 +61,14 @@ String getIP(){
 // Initialize WiFi
 void initWiFi() {
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+  WiFi.begin(ssid, password);   // Connect to WiFi
   Serial.print("Connecting to WiFi ..");
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print('.');
     delay(1000);
   }
+
+  // Blink a LED when the MCU succesfully connect to WiFi
   digitalWrite(2, HIGH);
   delay(500);
   digitalWrite(2, LOW);
@@ -74,6 +76,8 @@ void initWiFi() {
   Serial.println(WiFi.localIP());
 }
 
+// This function send the data each time
+// notifyClients is called
 void notifyClients(String sensorReadings) {
   ws.textAll(sensorReadings);
 }
@@ -83,11 +87,8 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
   if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
     data[len] = 0;
     String message = (char*)data;
-    // Check if the message is "getReadings"
-    if (strcmp((char*)data, "getReadings") == 0) {
-      // if it is, send current sensor readings
-      String sensorReadings = getSensorReadings(0);
-      notifyClients(sensorReadings);
+    // Check if the message is "stop"
+    if (strcmp((char*)data, "stop") == 0) {
       test = false;
     } else {
       JSONVar obj = JSON.parse(message);
@@ -132,9 +133,9 @@ void initWebSocket() {
 
 void setup() {
   Serial.begin(115200);
-  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
-    Serial.println("STA Failed to configure");
-  }
+  //if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+  //  Serial.println("STA Failed to configure");
+  //}
 
   pinMode(2, OUTPUT);
   pinMode(M0, OUTPUT);
@@ -161,6 +162,10 @@ void setup() {
 
   // Start server
   server.begin();
+  digitalWrite(2, HIGH);
+  delay(500);
+  digitalWrite(2, LOW);
+  delay(500);
 }
 
 void loop() {

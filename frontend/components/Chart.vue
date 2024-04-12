@@ -32,13 +32,19 @@ export default {
     nanometers: {
       type: Array,
       default: []
+    },
+    rs: {
+      type: Array,
+      default: []
     }
   },
   setup() {
     const isDark = useIsDark().isDark
+    const isNano = useIsNano().isNano
     const appConfig = useAppConfig().theme
     return {
       isDark,
+      isNano,
       appConfig
     }
   },
@@ -47,7 +53,7 @@ export default {
     return {
       realTimeChart,
       chartData_: {
-        labels: this.nanometers,//getDataNanometers,
+        labels: this.isNano ? this.nanometers:this.rs,//getDataNanometers,
         datasets: [
           {
             label: "Caracs",
@@ -76,7 +82,7 @@ export default {
             suggestedMax: 100,
             title: {
               display: true,
-              text: 'Nanometers (nm)'
+              text: 'Raman shift (cm^{-1})'
             },
             border: {
               display: true
@@ -110,7 +116,7 @@ export default {
       const borderColor = this.isDark ? this.appConfig.colorsDark.primaryColor_:this.appConfig.colorsLight.primaryColor_
 
       const data = {
-        labels: this.nanometers,//getDataNanometers,
+        labels: this.isNano ? this.nanometers:this.rs,//getDataNanometers,
         datasets: [
           {
             label: "Signal",
@@ -145,7 +151,7 @@ export default {
           x: {
             title: {
               display: true,
-              text: 'Nanometers (nm)',
+              text: this.isNano ? 'Nanometers (nm)':'Raman shift (1/cm)',
               color: color
             },
             border: {
