@@ -32,7 +32,7 @@ AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
 
 // Set your Static IP address
-IPAddress local_IP(192, 168, 0, 190);
+IPAddress local_IP(192, 168, 0, 196);
 // Set your Gateway IP address
 IPAddress gateway(192, 168, 0, 1);
 
@@ -153,6 +153,8 @@ void setup() {
   digitalWrite(STEP, LOW);
   digitalWrite(DIR, LOW);
   digitalWrite(ENABLE, HIGH);
+
+  //https://lastminuteengineers.com/esp32-static-ip-tutorial/
 
   // Start server
   server.begin();
