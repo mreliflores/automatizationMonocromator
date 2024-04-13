@@ -28,8 +28,14 @@ div.atomBox {
   border-width: 3px;
   border-style: solid;
   border-radius: 10px;
-  width: 80%;
+  width: 65%;
   padding: 30px 15px;
   margin: 30px 15px;
+}
+
+@media (max-width: 520px) {
+  div.atomBox {
+    width: 90%;
+  }
 }
 </style>

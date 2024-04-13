@@ -5,8 +5,8 @@
 #include <Arduino_JSON.h>
 
 // Replace with your network credentials
-const char* ssid = "lab laser 2";
-const char* password = "160,Lab.Laser!";
+const char* ssid = "TP-LINK_D12FE3";
+const char* password = "31133289";
 
 int client_;
 
@@ -23,7 +23,6 @@ int RESET = 26;
 int ENABLE = 13;
 int FOTOMULTIPLICADOR = 34;
 
-bool pass = false;
 bool test = false;
 
 // Create AsyncWebServer object on port 80
@@ -33,13 +32,13 @@ AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
 
 // Set your Static IP address
-//IPAddress local_IP(192, 168, 1, 190);
+IPAddress local_IP(192, 168, 0, 190);
 // Set your Gateway IP address
-//IPAddress gateway(192, 168, 1, 1);
+IPAddress gateway(192, 168, 0, 1);
 
-//IPAddress subnet(255, 255, 0, 0);
-//IPAddress primaryDNS(8, 8, 8, 8);   //optional
-//IPAddress secondaryDNS(8, 8, 4, 4); //optional
+IPAddress subnet(255, 255, 255, 0);
+IPAddress primaryDNS(8, 8, 8, 8);   //optional
+IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 // Json Variable to Hold Sensor Readings
 JSONVar readings;
@@ -69,10 +68,6 @@ void initWiFi() {
   }
 
   // Blink a LED when the MCU succesfully connect to WiFi
-  digitalWrite(2, HIGH);
-  delay(500);
-  digitalWrite(2, LOW);
-  delay(500);
   Serial.println(WiFi.localIP());
 }
 
@@ -133,9 +128,12 @@ void initWebSocket() {
 
 void setup() {
   Serial.begin(115200);
-  //if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
-  //  Serial.println("STA Failed to configure");
-  //}
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+    Serial.println("STA Failed to configure");
+  }
+
+  initWiFi();
+  initWebSocket();
 
   pinMode(2, OUTPUT);
   pinMode(M0, OUTPUT);
@@ -155,17 +153,9 @@ void setup() {
   digitalWrite(STEP, LOW);
   digitalWrite(DIR, LOW);
   digitalWrite(ENABLE, HIGH);
-  
-  initWiFi();
-  initWebSocket();
-
 
   // Start server
   server.begin();
-  digitalWrite(2, HIGH);
-  delay(500);
-  digitalWrite(2, LOW);
-  delay(500);
 }
 
 void loop() {
